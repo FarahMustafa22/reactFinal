@@ -1,21 +1,16 @@
-import logo from './logo.svg';
-import './App.css';
 import React, { useState, useEffect } from 'react';
+import './App.css';
 
 function App() {
-  const [notes, setNotes] = useState([]);
+  const [notes, setNotes] = useState(() => {
+    const savedNotes = localStorage.getItem('notes');
+    return savedNotes ? JSON.parse(savedNotes) : [];
+  });
   const [title, setTitle] = useState('');
   const [body, setBody] = useState('');
-  const [color, setColor] = useState('');
+  const [color, setColor] = useState('#ffffff'); // Default color set to white
   const [showAddNote, setShowAddNote] = useState(false);
   const [editingNoteId, setEditingNoteId] = useState(null);
-
-  useEffect(() => {
-    const savedNotes = JSON.parse(localStorage.getItem('notes'));
-    if (savedNotes) {
-      setNotes(savedNotes);
-    }
-  }, []);
 
   useEffect(() => {
     localStorage.setItem('notes', JSON.stringify(notes));
@@ -32,8 +27,8 @@ function App() {
     setNotes([...notes, newNote]);
     setTitle('');
     setBody('');
-    setColor('');
-    setShowAddNote(false); 
+    setColor('#ffffff'); // Reset color to default after adding note
+    setShowAddNote(false);
   };
 
   const removeNote = (id) => {
@@ -47,7 +42,7 @@ function App() {
     setBody(noteToEdit.body);
     setColor(noteToEdit.color);
     setEditingNoteId(id);
-    setShowAddNote(true); 
+    setShowAddNote(true);
   };
 
   const saveEditedNote = () => {
@@ -65,9 +60,9 @@ function App() {
     setNotes(editedNotes);
     setTitle('');
     setBody('');
-    setColor('');
+    setColor('#ffffff'); // Reset color to default after saving edited note
     setEditingNoteId(null);
-    setShowAddNote(false); 
+    setShowAddNote(false);
   };
 
   return (
